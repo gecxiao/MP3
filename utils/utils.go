@@ -10,12 +10,13 @@ import (
 )
 
 //Fetches all the ports
-func FetchPorts()([]string, []string, []string){
+func FetchProcesses()([]string, []string, []string, []float64){
 	line := 0
 	f, err := os.Open("./config.txt")
 	var ids []string
 	var ips []string
 	var ports []string
+	var initials []float64
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,9 +29,12 @@ func FetchPorts()([]string, []string, []string){
 			id := strings.Split(scanner.Text(), " ")[0]
 			ip := strings.Split(scanner.Text(), " ")[1]
 			port := strings.Split(scanner.Text(), " ")[2]
+			initial := strings.Split(scanner.Text(), " ")[3]
 			ids = append(ids, id)
 			ips = append(ips, ip)
 			ports = append(ports, port)
+			initialF, _ := strconv.ParseFloat(initial, 64)
+			initials = append(initials, initialF)
 		}
 		line = line + 1
 	}
@@ -38,7 +42,7 @@ func FetchPorts()([]string, []string, []string){
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	return ids, ips, ports
+	return ids, ips, ports, initials
 }
 
 
